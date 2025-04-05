@@ -139,25 +139,30 @@ const states = [{
 
 
 function App() {
-  const [selectedState, setSelectedState] = useState(states[0]);
-  const [selectedCity, setSelectedCity] = useState(states[0].city[0]);
-  const [selectedLandmark, setSelectedLandmark] = useState(states[0].city[0].landmarks[0]);
+  const [selectedStateIndex, setSelectedStateIndex] = useState(0);
+  const [selectedCityIndex, setSelectedCityIndex] = useState(0);
+  const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
+
+  const selectedState = states[selectedStateIndex];
+  const selectedCity = selectedState.city[selectedCityIndex];
+  const selectedLandmark = selectedCity.landmarks[selectedLandmarkIndex];
 
   const handleStateChange = (e) => {
-    const state = states[e.target.value];
-    setSelectedState(state);
-    setSelectedCity(state.city[0]);
-    setSelectedLandmark(state.city[0].landmarks[0]);
+    const index = parseInt(e.target.value);
+    setSelectedStateIndex(index);
+    setSelectedCityIndex(0);
+    setSelectedLandmarkIndex(0);
   };
 
   const handleCityChange = (e) => {
-    const city = selectedState.city[e.target.value];
-    setSelectedCity(city);
-    setSelectedLandmark(city.landmarks[0]);
+    const index = parseInt(e.target.value);
+    setSelectedCityIndex(index);
+    setSelectedLandmarkIndex(0);
   };
 
   const handleLandmarkChange = (e) => {
-    setSelectedLandmark(selectedCity.landmarks[e.target.value]);
+    const index = parseInt(e.target.value);
+    setSelectedLandmarkIndex(index);
   };
 
   return (
@@ -167,9 +172,10 @@ function App() {
           <div className="mb-3">
             <label className="form-label">States:</label>
             <select
+              id="state"
               className="form-select"
               onChange={handleStateChange}
-              value={states.indexOf(selectedState)}
+              value={selectedStateIndex}
             >
               {states.map((state, index) => (
                 <option key={index} value={index}>
@@ -181,9 +187,10 @@ function App() {
           <div className="mb-3">
             <label className="form-label">Cities:</label>
             <select
+              id="city"
               className="form-select"
               onChange={handleCityChange}
-              value={selectedState.city.indexOf(selectedCity)}
+              value={selectedCityIndex}
             >
               {selectedState.city.map((city, index) => (
                 <option key={index} value={index}>
@@ -195,9 +202,10 @@ function App() {
           <div className="mb-3">
             <label className="form-label">Landmarks:</label>
             <select
+              id="landmark"
               className="form-select"
               onChange={handleLandmarkChange}
-              value={selectedCity.landmarks.indexOf(selectedLandmark)}
+              value={selectedLandmarkIndex}
             >
               {selectedCity.landmarks.map((landmark, index) => (
                 <option key={index} value={index}>
@@ -207,18 +215,19 @@ function App() {
             </select>
           </div>
         </div>
+
         <div className="col-md-8">
           <div className="card p-3 mb-3">
-            <h5>{selectedState.name}</h5>
-            <p>{selectedState.description}</p>
+            <h5 id="state-name">{selectedState.name}</h5>
+            <p id="state-description">{selectedState.description}</p>
           </div>
           <div className="card p-3 mb-3">
-            <h5>{selectedCity.name}</h5>
-            <p>{selectedCity.description}</p>
+            <h5 id="city-name">{selectedCity.name}</h5>
+            <p id="city-description">{selectedCity.description}</p>
           </div>
           <div className="card p-3">
-            <h5>{selectedLandmark.name}</h5>
-            <p>{selectedLandmark.description}</p>
+            <h5 id="landmark-name">{selectedLandmark.name}</h5>
+            <p id="landmark-description">{selectedLandmark.description}</p>
           </div>
         </div>
       </div>
