@@ -1,6 +1,6 @@
-import React, { useState,useReducer } from "react";
+import React, { useState } from "react";
 import "./../styles/App.css";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const states = [{
 	name : "Madhya Pradesh",
@@ -138,15 +138,92 @@ const states = [{
 }];
 
 
-function App() 
-{
-	// Do not alter/remove main div
-	return (
-	<div id="main">
-		
-	</div>
-	);
-}
+function App() {
+  const [selectedState, setSelectedState] = useState(states[0]);
+  const [selectedCity, setSelectedCity] = useState(states[0].city[0]);
+  const [selectedLandmark, setSelectedLandmark] = useState(states[0].city[0].landmarks[0]);
 
+  const handleStateChange = (e) => {
+    const state = states[e.target.value];
+    setSelectedState(state);
+    setSelectedCity(state.city[0]);
+    setSelectedLandmark(state.city[0].landmarks[0]);
+  };
+
+  const handleCityChange = (e) => {
+    const city = selectedState.city[e.target.value];
+    setSelectedCity(city);
+    setSelectedLandmark(city.landmarks[0]);
+  };
+
+  const handleLandmarkChange = (e) => {
+    setSelectedLandmark(selectedCity.landmarks[e.target.value]);
+  };
+
+  return (
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-4">
+          <div className="mb-3">
+            <label className="form-label">States:</label>
+            <select
+              className="form-select"
+              onChange={handleStateChange}
+              value={states.indexOf(selectedState)}
+            >
+              {states.map((state, index) => (
+                <option key={index} value={index}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Cities:</label>
+            <select
+              className="form-select"
+              onChange={handleCityChange}
+              value={selectedState.city.indexOf(selectedCity)}
+            >
+              {selectedState.city.map((city, index) => (
+                <option key={index} value={index}>
+                  {city.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Landmarks:</label>
+            <select
+              className="form-select"
+              onChange={handleLandmarkChange}
+              value={selectedCity.landmarks.indexOf(selectedLandmark)}
+            >
+              {selectedCity.landmarks.map((landmark, index) => (
+                <option key={index} value={index}>
+                  {landmark.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="col-md-8">
+          <div className="card p-3 mb-3">
+            <h5>{selectedState.name}</h5>
+            <p>{selectedState.description}</p>
+          </div>
+          <div className="card p-3 mb-3">
+            <h5>{selectedCity.name}</h5>
+            <p>{selectedCity.description}</p>
+          </div>
+          <div className="card p-3">
+            <h5>{selectedLandmark.name}</h5>
+            <p>{selectedLandmark.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default App;
